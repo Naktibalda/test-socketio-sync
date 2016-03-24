@@ -30,7 +30,7 @@ describe('failIfReceived', function() {
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
-      assert.equal('[FailIfReceived Client 2] Event "joined room" with data "Room#6" was received', err.message);
+      assert.equal(err.message, '[FailIfReceived Client 2] Event "joined room" with data "Room#6" was received');
       done();
     });
   });

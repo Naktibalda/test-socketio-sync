@@ -37,7 +37,7 @@ describe('executeFunction', function() {
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
-      assert.equal('[ExecuteFunction Client 2] executeFunction timed out', err.message);
+      assert.equal(err.message, '[ExecuteFunction Client 2] executeFunction timed out');
       done();
     });
   });
@@ -53,7 +53,7 @@ describe('executeFunction', function() {
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
-      assert.equal('[ExecuteFunction Client 3] executeFunction returned error "failed something"' , err.message);
+      assert.equal(err.message, '[ExecuteFunction Client 3] executeFunction returned error "failed something"');
       done();
     });
   });

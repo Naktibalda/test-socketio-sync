@@ -49,7 +49,7 @@ describe('waitForOtherClients', function() {
       if (e.message == 'Exception was not thrown') {
         throw e;
       }
-      assert.equal('[WaitForOtherClients Client 3] wait label "joined room" can not be registered two times', e.message);
+      assert.equal(e.message, '[WaitForOtherClients Client 3] wait label "joined room" can not be registered two times');
     }
   });
 });
