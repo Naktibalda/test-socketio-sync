@@ -37,4 +37,26 @@ describe('failIfReceivedNonBlocking', function() {
       done();
     });
   });
+
+  it('should pass if match function returned false', function(done) {
+    var client = new Client('FailIfReceivedNonBlocking Client 3');
+    client.failIfReceivedNonBlocking('joined room', function(message) { return message.substr(4, 2) === '#3'; }, 100)
+      .emit('join room', 'Room#6')
+      .waitFor('joined room', 'Room#6', 500);
+
+    socketTester.run([client], done);
+  });
+
+  it('should fail if match function returned true', function(done) {
+    var client = new Client('FailIfReceivedNonBlocking Client 4');
+    client.failIfReceivedNonBlocking('joined room', function(message) { return message.substr(0, 4) === 'Room'; }, 100)
+      .emit('join room', 'Room#6')
+      .waitFor('joined room', 'Room#5', 500);
+
+    socketTester.run([client], function(err, label) {
+      assert.isDefined(err, 'Exception was not thrown');
+      assert.equal(err.message, '[FailIfReceivedNonBlocking Client 4] Event "joined room" with matching data was received');
+      done();
+    });
+  });
 });

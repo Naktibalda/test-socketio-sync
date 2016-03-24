@@ -35,5 +35,23 @@ describe('failIfReceived', function() {
     });
   });
 
+  it('should pass if match function returned false', function(done) {
+    var client = new Client('FailIfReceived Client 3');
+    client.emit('join room', 'Room#6')
+      .failIfReceived('joined room', function(message) { return message.substr(4, 2) === '#3'; }, 100);
 
+    socketTester.run([client], done);
+  });
+
+  it('should fail if match function returned true', function(done) {
+    var client = new Client('FailIfReceived Client 4');
+    client.emit('join room', 'Room#6')
+      .failIfReceived('joined room', function(message) { return message.substr(0, 4) === 'Room'; }, 100);
+
+    socketTester.run([client], function(err, label) {
+      assert.isDefined(err, 'Exception was not thrown');
+      assert.equal(err.message, '[FailIfReceived Client 4] Event "joined room" with matching data was received');
+      done();
+    });
+  });
 });

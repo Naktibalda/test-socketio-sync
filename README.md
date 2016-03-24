@@ -76,16 +76,29 @@ it('should wait for other clients to reach the same point', function() {
 /**
  * Waits for event
  * @param {string} event
- * @param data Must match exactly if not null
+ * @param match See Matching
  * @timeout {Number} in milliseconds
  */
 ```
+
+waitFor, failIfReceived and failIfReceivedNonBlocking methods match any value if match parameter is set to null,
+if match is a function, event data is passed to the function and function returns if it matched.
+
 ### failIfReceived(event, data, [timeout])
 ```
 /**
  * Fails if event is received
  * @param {string} event
- * @param data Must match exactly if not null
+ * @param match See waitFor
+ * @timeout {Number} in milliseconds
+ */
+```
+### failIfReceivedNonBlocking(event, data, [timeout])
+```
+/**
+ * Fails if event is received
+ * @param {string} event
+ * @param match See waitFor
  * @timeout {Number} in milliseconds
  */
 ```
@@ -104,4 +117,12 @@ it('should wait for other clients to reach the same point', function() {
  * @param {Function} function
  * @timeout {Number} in milliseconds
  */
+```
+
+Callback is passed to the function and it can be called with exception or nothing to indicate that execution is complete.
+```
+client.executeFunction(
+    function(callback) {
+        mysql.query('UPDATE table SET status = \'Down\' WHERE id = 1', callback);
+    }, 500);
 ```

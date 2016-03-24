@@ -33,4 +33,23 @@ describe('waitFor', function() {
       done();
     });
   });
+
+  it('should pass if match function returned true', function(done) {
+    var client = new Client('WaitFor Client 3');
+    client.emit('join room', 'Room#7')
+      .waitFor('joined room', function(message) { return message.substr(0, 4) === 'Room'; }, 500);
+    socketTester.run([client], done);
+  });
+
+  it('should fail if match function returned false', function(done) {
+    var client = new Client('WaitFor Client 4');
+    client.emit('join room', 'Room#7')
+      .waitFor('joined room', function(message) { return message.substr(4, 2) === '#3'; }, 500);
+
+    socketTester.run([client], function(err, label) {
+      assert.isDefined(err, 'Exception was not thrown');
+      assert.equal(err.message, '[WaitFor Client 4] Event "joined room" with matching data was not received in 500 milliseconds');
+      done();
+    });
+  });
 });
