@@ -17,7 +17,7 @@ var Client = socketTester.Client;
 
 describe('executeFunction', function() {
   it('should pass if function calls callback in time', function(done) {
-    var client = new Client('Client 1');
+    var client = new Client('ExecuteFunction Client 1');
     var testFunction = function(callback) {
       callback();
     };
@@ -27,7 +27,7 @@ describe('executeFunction', function() {
   });
 
   it('should fail if function does not call callback in time', function(done) {
-    var client = new Client('Client 2');
+    var client = new Client('ExecuteFunction Client 2');
     var testFunction = function(callback) {
       setTimeout(function() {
         callback();
@@ -37,13 +37,13 @@ describe('executeFunction', function() {
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
-      assert.equal('[Client 2] executeFunction timed out', err.message);
+      assert.equal('[ExecuteFunction Client 2] executeFunction timed out', err.message);
       done();
     });
   });
 
   it('should fail if function calls callback with error', function(done) {
-    var client = new Client('Client 3');
+    var client = new Client('ExecuteFunction Client 3');
     var testFunction = function(callback) {
       setTimeout(function() {
         callback(new Error('failed something'));
@@ -53,7 +53,7 @@ describe('executeFunction', function() {
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
-      assert.equal('[Client 3] executeFunction returned error "failed something"' , err.message);
+      assert.equal('[ExecuteFunction Client 3] executeFunction returned error "failed something"' , err.message);
       done();
     });
   });

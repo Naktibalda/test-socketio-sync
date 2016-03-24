@@ -17,8 +17,8 @@ var Client = socketTester.Client;
 
 describe('waitForOtherClients', function() {
   it('should ensure that all clients that all clients are at the same point before continuing', function(done) {
-    var client1 = new Client('Client 1');
-    var client2 = new Client('Client 2');
+    var client1 = new Client('WaitForOtherClients Client 1');
+    var client2 = new Client('WaitForOtherClients Client 2');
     client1.emit('join room', 'Room#6')
       .waitFor('joined room', 'Room#6', 100)
       .waitForOtherClients('joined room')
@@ -40,7 +40,7 @@ describe('waitForOtherClients', function() {
   });
 
   it('should throw exception if client registers the same wait label twice', function() {
-    var client1 = new Client('Client 1');
+    var client1 = new Client('WaitForOtherClients Client 3');
 
     try {
       client1.waitForOtherClients('joined room').waitForOtherClients('joined room');
@@ -49,7 +49,7 @@ describe('waitForOtherClients', function() {
       if (e.message == 'Exception was not thrown') {
         throw e;
       }
-      assert.equal('[Client 1] wait label "joined room" can not be registered two times', e.message);
+      assert.equal('[WaitForOtherClients Client 3] wait label "joined room" can not be registered two times', e.message);
     }
   });
 });

@@ -17,20 +17,20 @@ var Client = socketTester.Client;
 
 describe('failIfReceived', function() {
   it('should pass if event was not received', function(done) {
-    var client = new Client('Client 1');
+    var client = new Client('FailIfReceived Client 1');
     client.failIfReceived('joined room', 'Room#5', 100);
 
     socketTester.run([client], done);
   });
 
   it('should fail if event was received', function(done) {
-    var client = new Client('Client 1');
+    var client = new Client('FailIfReceived Client 2');
     client.emit('join room', 'Room#6')
       .failIfReceived('joined room', 'Room#6', 100);
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
-      assert.equal('[Client 1] Event "joined room" with data "Room#6" was received', err.message);
+      assert.equal('[FailIfReceived Client 2] Event "joined room" with data "Room#6" was received', err.message);
       done();
     });
   });
