@@ -28,8 +28,7 @@ describe('failIfReceivedNonBlocking', function() {
   it('should fail if event was received', function(done) {
     var client = new Client('FailIfReceivedNonBlocking Client 2');
     client.failIfReceivedNonBlocking('joined room', 'Room#6', 100)
-      .emit('join room', 'Room#6')
-      .waitFor('joined room', 'Room#5', 500);
+      .emit('join room', 'Room#6');
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
@@ -51,12 +50,25 @@ describe('failIfReceivedNonBlocking', function() {
     var client = new Client('FailIfReceivedNonBlocking Client 4');
     client.failIfReceivedNonBlocking('joined room', function(message) { return message.substr(0, 4) === 'Room'; }, 100)
       .emit('join room', 'Room#6')
-      .waitFor('joined room', 'Room#5', 500);
+      .waitFor('joined room', 'Room#6', 500);
 
     socketTester.run([client], function(err, label) {
       assert.isDefined(err, 'Exception was not thrown');
       assert.equal(err.message, '[FailIfReceivedNonBlocking Client 4] Event "joined room" with matching data was received');
       done();
     });
+  });
+
+  it('should block test after the last action is finished', function (done) {
+    var client = new Client('FailIfReceivedNonBlocking Client 5');
+    client.failIfReceivedNonBlocking('time', 5, 800)
+        .emit('join room', 'Room#6');
+
+    socketTester.run([client], function(err, label) {
+      assert.isDefined(err, 'Exception was not thrown');
+      assert.equal(err.message, '[FailIfReceivedNonBlocking Client 5] Event "time" with data 5 was received');
+      done();
+    });
+
   });
 });

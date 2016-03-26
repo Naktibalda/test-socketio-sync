@@ -16,6 +16,7 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
   this.clientsReturned = [];
   this.clients = [];
 
+  //used by waitForOtherClients
   this.waitCounters = {};
   this.waitCallbacks = {};
 
@@ -83,6 +84,11 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
 
     this.actions = [];
     this.waitLabels = [];
+
+    //used by NonBlocking functions
+    this.failed = false;
+    this.nonBlockingActionsRunning = 0;
+    this.nonBlockingActionsCallback = null;
 
     this.socketClient = tester.io.connect(tester.socketUrl, this.socketOptions);
 
