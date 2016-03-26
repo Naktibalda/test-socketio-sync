@@ -5,6 +5,8 @@ module.exports = function(io){
 
   io.on('connection', function(socket){
 
+    socket.emit('first_message', 1);
+
     var timerCounter = 1;
 
     var timer = setInterval(function() {

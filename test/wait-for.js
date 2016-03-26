@@ -52,4 +52,10 @@ describe('waitFor', function() {
       done();
     });
   });
+
+  it('should get event emitted on connection', function(done) {
+    var client2 = new Client('WaitFor Client 5');
+    client2.waitFor('first_message', 1);
+    socketTester.run([client2], done);
+  });
 });
