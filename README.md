@@ -1,4 +1,4 @@
-# test-socketio-sync
+# test-socketio-sync [![npm version](https://badge.fury.io/js/test-socketio-sync.svg)](https://badge.fury.io/js/test-socketio-sync)[![Build Status](https://api.travis-ci.org/Naktibalda/test-socketio-sync.svg)](https://api.travis-ci.org/Naktibalda/test-socketio-sync)
 
 Sychronous testing library for Socket.IO, inspired by socket-tester and Codeception.
 
