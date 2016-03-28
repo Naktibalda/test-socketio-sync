@@ -55,11 +55,12 @@ it('should wait for other clients to reach the same point', function() {
  * @param {Function} done    Mocha done function
  */
 ```
-### new Client(label, [socketOptions])
+### new Client(label, socketUrl, [socketOptions])
 ```
 /**
  * Runs tests
  * @param {string} label Used to identify client in error messages
+ * @param {string} socketUrl Can be different to support namespaces
  * @param {Object} socketOptions customize options per-client
  */
 ```

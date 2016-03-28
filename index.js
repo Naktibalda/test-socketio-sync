@@ -75,8 +75,9 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
     }
   };
 
-  this.Client = function Client(label, socketOptions) {
+  this.Client = function Client(label, socketUrl, socketOptions) {
     this.label = label || 'Client';
+    this.socketUrl = socketUrl || tester.socketUrl;
     this.socketOptions = _.clone(tester.socketOptions);
     if (_.isPlainObject(socketOptions)) {
       _.merge(this.socketOptions, socketOptions);
@@ -90,7 +91,7 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
     this.nonBlockingActionsRunning = 0;
     this.nonBlockingActionsCallback = null;
 
-    this.socketClient = tester.io.connect(tester.socketUrl, this.socketOptions);
+    this.socketClient = tester.io.connect(this.socketUrl, this.socketOptions);
 
     this.emit = function emit(event, data) {
       this.actions.push(new ClientActions.emit(event, data));

@@ -29,4 +29,12 @@ module.exports = function(io){
 
   });
 
+  var namespace = io.of('/namespace-1');
+  namespace.on('connection', function(socket){
+    socket.emit('welcome-to', 'namespace-1');
+  });
+
+  setInterval(function() {
+    namespace.emit('namespaced-message', 'text');
+  }, 100);
 };
