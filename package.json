@@ -1,6 +1,6 @@
 {
   "name": "test-socketio-sync",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Synchronous Socket.IO tester",
   "main": "index.js",
   "scripts": {
