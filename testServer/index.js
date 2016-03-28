@@ -10,8 +10,14 @@ require('./server/server.js')(app, express, io);
 // export our app for testing and flexibility, required by index.js
 var port = process.env.PORT || 3000;
 
-http.listen(port, function(){
+http.listen(port, function () {
   console.log('Listening on ' + port);
+}).on('error', function(err) {
+  if (err.errno === 'EADDRINUSE') {
+    console.log('http server is running already');
+  } else {
+    throw err;
+  }
 });
 
 module.exports = app;
