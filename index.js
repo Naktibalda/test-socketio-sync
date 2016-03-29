@@ -24,11 +24,12 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
 
   tester = this;
 
-  this.clientReturns = function clientReturns(err, label) {
+  this.clientReturns = function clientReturns(err, client) {
+    client.disconnect();
     if (err) {
       return tester.done(err);
     }
-    tester.clientsReturned.push(label);
+    tester.clientsReturned.push(client.label);
 
     if (tester.clientsReturned.length === tester.clients.length) {
       tester.done();
@@ -91,7 +92,16 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
     this.nonBlockingActionsRunning = 0;
     this.nonBlockingActionsCallback = null;
 
-    this.socketClient = tester.io.connect(this.socketUrl, this.socketOptions);
+    this.connect = function connect() {
+      this.socketClient = tester.io.connect(this.socketUrl, this.socketOptions);
+    };
+
+    this.disconnect = function disconnect() {
+      if (this.socketClient != null) {
+        this.socketClient.disconnect();
+        this.socketClient = null;
+      }
+    }
 
     this.emit = function emit(event, data) {
       this.actions.push(new ClientActions.emit(event, data));
@@ -137,6 +147,8 @@ var TestSocketIOSync = function(io, socketUrl, socketOptions) {
       if (this.actions.length === 0) {
         throw new Error('Client ' + this.label + ' has no actions configured');
       }
+
+      this.connect();
 
       var firstAction = this.actions.shift();
       firstAction.execute(this, tester.clientReturns);
