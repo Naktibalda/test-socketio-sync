@@ -2,9 +2,32 @@
 
 Sychronous testing library for Socket.IO, inspired by socket-tester and Codeception.
 
+## Installation
+```
+npm install test-socketio-sync
+```
+## How it works
+Firstly add actions to Client object, which is mutable
+so methods can be chained or executed in separate statements.<br />
+Multiple clients can be used to simulate concurrent users.<br />
+Then pass all clients to socketTester.run method.<br />
+Run method connects clients to socket.io server and starts the first action.<br />
+Further actions are started on successful completion of the previous action with exception of failIfReceivedNonBlocking method.<br />
+After completion of the last action, mocha callback method is called.
+If any action fails, error is passed to mocha callback.
+
 ## Examples
 
 ```js
+var TestSocketIOSync = require('test-socketio-sync');
+var io = require('socket.io-client');
+var socketUrl = 'http://localhost:3000';
+
+var options = {
+  transports: ['websocket'],
+  'force new connection': true
+};
+
 var socketTester = new TestSocketIOSync(io, socketUrl, options);
 var Client = socketTester.Client;
 
@@ -15,14 +38,14 @@ it('should emit event and wait for response', function(done) {
   socketTester.run([client1], done);
 });
 
-it('should check that event is not received', function() {
+it('should check that event is not received', function(done) {
   var client1 = new Client('first client');
   client1.emit('join room', 'Room #5')
     .failIfReceived('impossible event', 'Room#5', 10);
   socketTester.run([client1], done);
 });
 
-it('should wait for other clients to reach the same point', function() {
+it('should wait for other clients to reach the same point', function(done) {
   var client1 = new Client('first client');
   var client2 = new Client('second client');
 
@@ -35,6 +58,8 @@ it('should wait for other clients to reach the same point', function() {
   socketTester.run([client1, client2], done);
 });
 ```
+
+More examples can be found in [test directory](https://github.com/Naktibalda/test-socketio-sync/tree/master/test).
 
 ## API
 
@@ -121,9 +146,13 @@ if match is a function, event data is passed to the function and function return
 ```
 
 Callback is passed to the function and it can be called with exception or nothing to indicate that execution is complete.
-```
+```js
 client.executeFunction(
     function(callback) {
         mysql.query('UPDATE table SET status = \'Down\' WHERE id = 1', callback);
     }, 500);
 ```
+
+## Feedback
+
+Please report issues and request features in [Github](https://github.com/Naktibalda/test-socketio-sync/issues)
